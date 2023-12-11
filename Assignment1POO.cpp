@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -12,13 +13,23 @@ class Product
 	int priceHistoryLen = 0;
 
 public:
-	Product(int id, const char* name, const char* description, double price, const double* priceHistory)
+	Product(){}
+	Product(int id, const char* name, const char* description, double price, const double* priceHistory,int priceHistoryLen)
 	{
 		this->setId(id);
 		this->setName(name);
 		this->setDescription(description);
 		this->setPrice(price);
 		this->initPriceHistory(priceHistory, priceHistoryLen);
+	}
+	Product(const Product& p)
+	{
+		if (this == &p) return;
+		this->setId(p.id);
+		this->setName(p.name);
+		this->setDescription(p.description);
+		this->setPrice(p.price);
+		this->initPriceHistory(p.priceHistory, p.priceHistoryLen);
 	}
 
 	//all setters
@@ -131,13 +142,44 @@ public:
 		cout << endl;
 	}
 
+	Product& operator=(const Product& p) {
+		if (this == &p) return *this;
+		this->setId(p.id);
+		this->setName(p.name);
+		this->setDescription(p.description);
+		this->setPrice(p.price);
+		this->initPriceHistory(p.priceHistory, p.priceHistoryLen);
+
+		return *this;
+	}
+
 	~Product()
 	{
-
+		if (this->name != nullptr) {
+			delete[] this->name;
+		}
+		if (this->description != nullptr) {
+			delete[] this->description;
+		}
+		if (this->priceHistory != nullptr) {
+			delete[] this->priceHistory;
+		}
 	}
 };
 
 int main() {
-	cout << "hello world";
+	string input="";
+
+	double p1PriceHistory[3] = { 4599.99, 4299.99, 4149.99 };
+	Product p1(1, "Iphone 13", "Telefon mobil Iphone 13 128gb", 3999.99, p1PriceHistory, 3);
+	Product p2 = p1;
+	Product p3;
+	/*cout << "Introduceti id: " << endl;
+	getline(cin, input);
+	p3.setId(stoi(input));
+	cout << "Introduceti nume: " << endl;
+	getline(cin, input);
+	*/
+
 	return 0;
 }
